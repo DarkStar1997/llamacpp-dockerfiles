@@ -18,7 +18,6 @@ WORKDIR /opt
 RUN git clone -b "${LLAMA_CPP_TAG}" --depth 1 https://github.com/ggerganov/llama.cpp.git
 WORKDIR /opt/llama.cpp
 
-# Linker hint: use CUDA driver stubs at build time
 ENV CUDA_STUBS=/usr/local/cuda/targets/x86_64-linux/lib/stubs
 RUN ln -sf ${CUDA_STUBS}/libcuda.so /usr/lib/x86_64-linux-gnu/libcuda.so.1
 
@@ -49,5 +48,12 @@ ENV NVIDIA_DRIVER_CAPABILITIES=all
 
 COPY --from=builder /opt/llama.cpp/build/bin/ /opt/llama.cpp/build/bin/
 
-# Show llama-server usage on startup
+RUN mkdir -p /opt/llama.cpp/models && \
+    curl -L --fail --progress-bar \
+      -o /opt/llama.cpp/models/gemma-3-27b-it-Q4_K_M.gguf \
+      https://huggingface.co/ggml-org/gemma-3-27b-it-GGUF/resolve/main/gemma-3-27b-it-Q4_K_M.gguf && \
+    curl -L --fail --progress-bar \
+      -o /opt/llama.cpp/models/mmproj-model-f16.gguf \
+      https://huggingface.co/ggml-org/gemma-3-27b-it-GGUF/resolve/main/mmproj-model-f16.gguf
+
 CMD ["/opt/llama.cpp/build/bin/llama-server", "--help"]
