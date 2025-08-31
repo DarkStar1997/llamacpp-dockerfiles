@@ -63,8 +63,4 @@ ENV CTX=32768
 EXPOSE 8080
 
 # Run llama-server with Gemma model and overridable ngl/ctx
-CMD ["/bin/bash", "-lc", "/opt/llama.cpp/build/bin/llama-server \
-  -m /opt/llama.cpp/models/gemma-3-27b-it-Q4_K_M.gguf \
-  --mmproj /opt/llama.cpp/models/mmproj-model-f16.gguf \
-  -ngl ${NGL} --context-shift -c ${CTX} -fa on \
-  --host 0.0.0.0 --port 8080"]
+CMD ["/bin/bash", "-lc", "/opt/llama.cpp/build/bin/llama-server -m /opt/llama.cpp/models/gemma-3-27b-it-Q4_K_M.gguf --mmproj /opt/llama.cpp/models/mmproj-model-f16.gguf -ngl ${NGL} --context-shift -c ${CTX} -fa on --host 0.0.0.0 --port 8080"]
